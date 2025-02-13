@@ -1,30 +1,59 @@
-import { createOpenAI, type OpenAIProviderSettings } from '@ai-sdk/openai';
+import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai';
 import { getEncoding } from 'js-tiktoken';
 
 import { RecursiveCharacterTextSplitter } from './text-splitter';
+import { deepResearchObSettings } from 'src/setting';
 
-interface CustomOpenAIProviderSettings extends OpenAIProviderSettings {
-  baseURL?: string;
+export class provider {
+	private setting: deepResearchObSettings
+
+	constructor (setting: deepResearchObSettings ){
+		this.setting = setting
+	}
+
+	private createProvider: () => OpenAIProvider = () => {
+		return createOpenAI(
+			{
+				apiKey: this.setting.OPENAI_KEY,
+				baseURL: this.setting.OPENAI_ENDPOINT
+			}
+		)
+	}
+
+	invokeModal = (modalName: string, structuredOutputs: boolean, reasoningEffort?: 'medium' | 'high' | 'low') => {
+		const provider = this.createProvider()
+		const modal = provider(modalName, {
+			reasoningEffort: reasoningEffort ?? undefined ,
+			structuredOutputs: structuredOutputs
+		})
+
+		return modal
+	}
+
 }
 
-// Providers
-const openai = createOpenAI({
-  apiKey: process.env.OPENAI_KEY!,
-  baseURL: process.env.OPENAI_ENDPOINT || 'https://api.openai.com/v1',
-} as CustomOpenAIProviderSettings);
+// interface CustomOpenAIProviderSettings extends OpenAIProviderSettings {
+//   baseURL?: string;
+// }
 
-const customModel = process.env.OPENAI_MODEL || 'o3-mini';
+// // Providers
+// const openai = createOpenAI({
+//   apiKey: process.env.OPENAI_KEY!,
+//   baseURL: process.env.OPENAI_ENDPOINT || 'https://api.openai.com/v1',
+// } as CustomOpenAIProviderSettings);
 
-// Models
+// const customModel = process.env.OPENAI_MODEL || 'o3-mini';
 
-export const o3MiniModel = openai(customModel, {
-  reasoningEffort: customModel.startsWith('o') ? 'medium' : undefined,
-  structuredOutputs: true,
-});
+// // Models
 
-export const gpt4omini = openai('gpt-4o-mini', {
+// export const o3MiniModel = openai(customModel, {
+//   reasoningEffort: customModel.startsWith('o') ? 'medium' : undefined,
+//   structuredOutputs: true,
+// });
 
-})
+// export const gpt4omini = openai('gpt-4o-mini', {
+
+// })
 
 const MinChunkSize = 140;
 const encoder = getEncoding('o200k_base');

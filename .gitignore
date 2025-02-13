@@ -12,6 +12,7 @@ node_modules
 dist
 # They should be uploaded to GitHub releases instead.
 main.js
+test-vault
 
 # Exclude sourcemaps
 *.map

@@ -6,7 +6,12 @@
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"format": "prettier --write \"src/**/*.{ts,tsx}\"",
+		"tsx": "tsx --env-file=.env.local",
+		"start": "tsx --env-file=.env.local src/run.ts",
+		"docker": "tsx src/run.ts",
+		"test": "jest"
 	},
 	"keywords": [],
 	"author": "",
