@@ -24,7 +24,11 @@ const context = await esbuild.context({
             assets: [{
                 from: ["./dist/*"],
                 to: ["../test-vault/.obsidian/plugins/myplugin"]
-            }]
+            },
+			{
+				from: ["./public/*"],
+				to: ["../test-vault/.obsidian/plugins/myplugin"]
+			}]
         }),
     ],
 	external: [

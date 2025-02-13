@@ -9,6 +9,7 @@
 node_modules
 
 # Don't include the compiled main.js file in the repo.
+dist
 # They should be uploaded to GitHub releases instead.
 main.js
 
@@ -20,3 +21,6 @@ data.json
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
+
+# env
+.env.local
