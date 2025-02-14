@@ -1,9 +1,9 @@
 import { ResearchProgress } from './deep-research';
 
 export class OutputManager {
-  private progressLines: number = 4;
+  private progressLines = 4;
   private progressArea: string[] = [];
-  private initialized: boolean = false;
+  private initialized = false;
   
   constructor() {
     // Initialize terminal
