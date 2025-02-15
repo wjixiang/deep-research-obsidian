@@ -1,6 +1,6 @@
 {
-	"id": "brush-ti",
-	"name": "brushTi",
+	"id": "deepResearch",
+	"name": "deepResearchOb",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Demonstrates some of the capabilities of the Obsidian API.",

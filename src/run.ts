@@ -1,10 +1,8 @@
-import * as fs from 'fs/promises';
-// import * as readline from 'readline';
 
 import { researchWorker } from './deep-research';
 
 import { OutputManager } from './output-manager';
-import { deepResearchObSettings } from './setting';
+import { deepResearchObSettings } from './ob/setting';
 import { provider } from './ai/providers';
 import { feedback } from './feedback';
 
@@ -15,13 +13,17 @@ export class deepReserachAPI {
 	provider: provider;
 	feedback: feedback;
 	researchWorker: researchWorker;
+	fsWriter: (fileName: string, content:string) => Promise<void>;
+	log: (content:string)=>void;
 
-	constructor (queryFn: (query: string)=> Promise<string>, setting: deepResearchObSettings) {
+	constructor (queryFn: (query: string)=> Promise<string>, setting: deepResearchObSettings, writeFileFn: (fileName: string, content:string)=>Promise<void>, logFn: (content:string)=>void) {
 		this.queryFn = queryFn
 		this.setting = setting
 		this.provider = new provider(this.setting)
 		this.feedback = new feedback(this.provider)
 		this.researchWorker = new researchWorker(this.setting,this.provider)
+		this.fsWriter = writeFileFn
+		this.log = logFn
 	}
 
 	askQuestion(query: string): Promise<string> {
@@ -50,14 +52,14 @@ export class deepReserachAPI {
 			10,
 			) || 2;
 
-		log(`Creating research plan...`);
+		this.log(`Creating research plan...`);
 
 		// Generate follow-up questions
 		const followUpQuestions = await this.feedback.generateFeedback({
 			query: initialQuery,
 		});
 
-		log(
+		this.log(
 			'\nTo better understand your research needs, please answer these follow-up questions:',
 		);
 
@@ -75,9 +77,9 @@ export class deepReserachAPI {
 		${followUpQuestions.map((q: string, i: number) => `Q: ${q}\nA: ${answers[i]}`).join('\n')}
 		`;
 
-		log('\nResearching your topic...');
+		this.log('\nResearching your topic...');
 
-		log('\nStarting research with progress tracking...\n');
+		this.log('\nStarting research with progress tracking...\n');
 
 		const { learnings, visitedUrls } = await this.researchWorker.deepResearch({
 			query: combinedQuery,
@@ -88,11 +90,11 @@ export class deepReserachAPI {
 			},
 		});
 
-		log(`\n\nLearnings:\n\n${learnings.join('\n')}`);
-		log(
+		this.log(`\n\nLearnings:\n\n${learnings.join('\n')}`);
+		this.log(
 			`\n\nVisited URLs (${visitedUrls.length}):\n\n${visitedUrls.join('\n')}`,
 		);
-		log('Writing final report...');
+		this.log('Writing final report...');
 
 		const report = await this.researchWorker.writeFinalReport({
 			prompt: combinedQuery,
@@ -101,7 +103,7 @@ export class deepReserachAPI {
 		});
 
 		// Save report to file
-		await fs.writeFile('output.md', report, 'utf-8');
+		await this.fsWriter(`output${Date.now()}.md`, report);
 
 		console.log(`\n\nFinal Report:\n\n${report}`);
 		console.log('\nReport has been saved to output.md');
@@ -109,15 +111,3 @@ export class deepReserachAPI {
 }
 
 const output = new OutputManager();
-
-// Helper function for consistent logging
-function log(...args: any[]) {
-  output.log(...args);
-}
-
-// const rl = readline.createInterface({
-//   input: process.stdin,
-//   output: process.stdout,
-// });
-
-// Helper function to get user input

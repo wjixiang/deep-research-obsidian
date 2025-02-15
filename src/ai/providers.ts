@@ -2,7 +2,7 @@ import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai';
 import { getEncoding } from 'js-tiktoken';
 
 import { RecursiveCharacterTextSplitter } from './text-splitter';
-import { deepResearchObSettings } from 'src/setting';
+import { deepResearchObSettings } from 'src/ob/setting';
 
 export class provider {
 	private setting: deepResearchObSettings

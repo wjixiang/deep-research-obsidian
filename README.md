@@ -14,3 +14,9 @@ This plugin use firecrawl and LLM to generate comprehensive report:
 	1. Give basic direction.
 	2. 
 
+## Responser
+```mermiad
+flowchart TD
+A(user's requestion) --> Z(distribute to target agents)
+
+```

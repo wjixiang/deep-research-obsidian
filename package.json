@@ -48,6 +48,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.1.9",
     "@mendable/firecrawl-js": "^1.16.0",
+    "@xyflow/react": "^12.4.3",
     "ai": "^4.1.17",
     "axios": "^1.7.7",
     "dotenv": "^16.4.7",
@@ -57,8 +58,11 @@
     "p-limit": "^6.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "reactflow": "^11.11.4",
     "storybook": "^8.5.5",
-    "zod": "^3.24.1"
+    "styled-components": "^6.1.15",
+    "zod": "^3.24.1",
+    "zustand": "^5.0.3"
   },
   "engines": {
     "node": "22.x"

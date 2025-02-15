@@ -1,4 +1,4 @@
-import { ResearchProgress } from './deep-research';
+import { ResearchProgress } from "./deep-research";
 
 export class OutputManager {
   private progressLines = 4;
@@ -14,7 +14,7 @@ export class OutputManager {
   log(...args: any[]) {
     // Move cursor up to progress area
     if (this.initialized) {
-      process.stdout.write(`\x1B[${this.progressLines}A`);
+      process.stdout.write(`\x1B[${this.progressLines}A`); 
       // Clear progress area
       process.stdout.write('\x1B[0J');
     }

@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { trimPrompt, provider } from './ai/providers';
 import { systemPrompt } from './prompt';
 import { OutputManager } from './output-manager';
-import { deepResearchObSettings } from './setting';
+import { deepResearchObSettings } from './ob/setting';
 
 // Replace console.log with output.log
 
@@ -37,9 +37,14 @@ export class researchWorker {
 
 	constructor( setting: deepResearchObSettings, provider: provider ){
 		this.setting = setting
-		this.firecrawl = new FirecrawlApp({
-			apiKey: setting.FIRECRAWL_KEY
-		})
+		try {
+			this.firecrawl = new FirecrawlApp({
+				apiKey: setting.FIRECRAWL_KEY,
+				apiUrl: setting.FIRECRAWL_BASE_URL
+			})
+		} catch (error) {
+			console.error("improper Firecrawl setting")
+		}
 		this.provider = provider
 	}
 

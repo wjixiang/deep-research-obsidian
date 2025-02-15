@@ -1,5 +1,5 @@
 import { PluginSettingTab, App, Setting } from "obsidian";
-import deepResearchOb from "./main";
+import deepResearchOb from "../main";
 
 export interface deepResearchObSettings {  
     OPENAI_ENDPOINT: string;
@@ -12,12 +12,12 @@ export interface deepResearchObSettings {
   
   
 export const DEFAULT_SETTINGS: Partial<deepResearchObSettings> = {  
-	OPENAI_ENDPOINT: 'https://www.gptapi.us/v1',
-    OPENAI_KEY: "sk-qEWCkRNZDHKcTf1vCc9846Cf7693404dAc99C5F6F6B178Cd",
+	OPENAI_ENDPOINT: '',
+    OPENAI_KEY: "",
 	CONTEXT_SIZE: "128000",
 	OPENAI_MODEL: "o3-mini",
-	FIRECRAWL_KEY: "fc-0621ea0c32004717aef9e673510ed7ba",
-	// FIRECRAWL_BASE_URL: ""
+	FIRECRAWL_KEY: "",
+	FIRECRAWL_BASE_URL: "http://localhost:3002"
 };
 
 export class deepResearchObSettingTab extends PluginSettingTab {  
@@ -80,6 +80,15 @@ export class deepResearchObSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.FIRECRAWL_KEY)
 				.onChange(async (value) => {
 					this.plugin.settings.FIRECRAWL_KEY = value;
+					await this.plugin.saveSettings();
+				}));
+		
+		new Setting(containerEl)
+			.setName('FIRECRAWL_BASE_URL')
+			.addText(text => text
+				.setValue(this.plugin.settings.FIRECRAWL_BASE_URL)
+				.onChange(async (value) => {
+					this.plugin.settings.FIRECRAWL_BASE_URL = value;
 					await this.plugin.saveSettings();
 				}));
     }  
