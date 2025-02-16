@@ -21,7 +21,6 @@ export class deepReserachAPI {
 		this.setting = setting
 		this.provider = new provider(this.setting)
 		this.feedback = new feedback(this.provider)
-		this.researchWorker = new researchWorker(this.setting,this.provider)
 		this.fsWriter = writeFileFn
 		this.log = logFn
 	}
@@ -35,6 +34,7 @@ export class deepReserachAPI {
 
 	// run the agent
 	async run() {
+		this.researchWorker = new researchWorker(this.setting,this.provider, this.log)
 		// Get initial query
 		const initialQuery = await this.askQuestion('What would you like to research? ');
 	
