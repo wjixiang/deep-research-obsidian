@@ -5,7 +5,7 @@ import { OutputManager } from './output-manager';
 import { deepResearchObSettings } from './ob/setting';
 import { provider } from './ai/providers';
 import { feedback } from './feedback';
-
+import { Notice } from 'obsidian';
 
 export class deepReserachAPI {
 	queryFn: (query: string)=> Promise<string>;
@@ -52,16 +52,14 @@ export class deepReserachAPI {
 			10,
 			) || 2;
 
-		this.log(`Creating research plan...`);
+		new Notice(`Creating research plan...`,1000)
 
 		// Generate follow-up questions
 		const followUpQuestions = await this.feedback.generateFeedback({
 			query: initialQuery,
 		});
 
-		this.log(
-			'\nTo better understand your research needs, please answer these follow-up questions:',
-		);
+		new Notice('To better understand your research needs, please answer these follow-up questions:',1000)
 
 		// Collect answers to follow-up questions
 		const answers: string[] = [];
@@ -77,9 +75,9 @@ export class deepReserachAPI {
 		${followUpQuestions.map((q: string, i: number) => `Q: ${q}\nA: ${answers[i]}`).join('\n')}
 		`;
 
-		this.log('\nResearching your topic...');
+		new Notice(`Researching your topic...`,1000)
 
-		this.log('\nStarting research with progress tracking...\n');
+		// this.log('\nStarting research with progress tracking...\n');
 
 		const { learnings, visitedUrls } = await this.researchWorker.deepResearch({
 			query: combinedQuery,
@@ -94,7 +92,7 @@ export class deepReserachAPI {
 		this.log(
 			`\n\nVisited URLs (${visitedUrls.length}):\n\n${visitedUrls.join('\n')}`,
 		);
-		this.log('Writing final report...');
+		new Notice(`Writing final report...`,1000)
 
 		const report = await this.researchWorker.writeFinalReport({
 			prompt: combinedQuery,
